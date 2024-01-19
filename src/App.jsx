@@ -1,5 +1,7 @@
 import React from 'react';
-import Doesitwork from "./components/Doesitwork"
+
+import Navbar from './components/Navbar/navbar';
+import Jumbotron from './components/Jumbotron/jumbotron';
 
 
 // import all the components you need 
@@ -8,7 +10,9 @@ function App() {
     return (
         <div>
             {/* place all components here so rendered */}
-            <Doesitwork />;
+            
+            <Navbar />
+            <Jumbotron />
         </div>
     )
 }
