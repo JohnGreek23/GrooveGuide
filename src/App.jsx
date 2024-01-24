@@ -107,10 +107,10 @@ function MusicApp() {
                   </a>
                 </Card.Title>
                 <Card.Text>
-                  Location: {event._embedded?.venues[0]?.name || 'Not available'}
+                  <b>Where:</b> {event._embedded?.venues[0]?.name || 'Not available'}
                   <br />
-                  Date & Time: {event.dates?.start?.localDate || 'Not available'} {event.dates?.start?.localTime || 'Not available'}
-                  {/* other event information */}
+                  <b>When:</b> {event.dates?.start?.localDate || 'Not available'} {event.dates?.start?.localTime || 'Not available'}
+                  {}
                 </Card.Text>
               </Card.Body>
             </Card>
