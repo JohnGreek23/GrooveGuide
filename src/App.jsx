@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
+import axios from 'axios';
 
 function MusicApp() {
   const [genre, setGenre] = useState('');
   const [artist, setArtist] = useState('');
   const [events, setEvents] = useState([]);
   const [latlong, setLatLong] = useState('');
+  const [artists, setArtists] = useState([]);
+
 
   const handleGenreChange = (e) => {
     setGenre(e.target.value);
@@ -29,6 +32,7 @@ function MusicApp() {
         const { latitude, longitude } = position.coords;
         setLatLong(`${latitude},${longitude}`);
         fetchRecommendedEvents(artist || genre, `${latitude},${longitude}`);
+        fetchRecommendedArtists(artist || genre);
       });
     }
   };
@@ -47,6 +51,23 @@ function MusicApp() {
         setEvents([]); // Clear events in case of an error
       });
   };
+
+  const fetchRecommendedArtists = (keyword) => {
+    const lastFmApiKey = '0fc8b422278de689fe5ad13e0b059af2'; // Replace with your Last.fm API key
+  
+    axios
+      .get(`http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&artist=${keyword}&api_key=${lastFmApiKey}&format=json`)
+      .then((response) => {
+        const similarArtistsData = response.data?.similarartists?.artist || [];
+        setArtists(similarArtistsData);
+        resetInputs(); // Reset inputs when results load
+      })
+      .catch((error) => {
+        console.error('Error fetching similar artists:', error);
+        setArtists([]); // Clear artists in case of an error
+      });
+  };
+  
 
   return (
     <Container className="music-app" style={{ marginTop: '50px', textAlign: 'center', backgroundColor: '#343a40', color: 'white', padding: '20px' }}>
@@ -83,7 +104,25 @@ function MusicApp() {
         </TabList>
 
         <TabPanel>
-          <p>No results found for artists.</p>
+        {artists.length === 0 ? (
+        <p>No results found for artists.</p>
+        ) : (
+          artists.map((artist, index) => (
+          <Card key={`artist_${index}`} style={{ margin: '10px', display: 'flex', alignItems: 'center' }}>
+            {/* Display artist information here */}
+            <Card.Body style={{ marginLeft: '10px' }}>
+              <Card.Title>
+                <a href={`https://www.last.fm/music/${artist.name}`} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
+                  {artist.name}
+            </a>
+          </Card.Title>
+          <Card.Text>
+            {/* Display additional artist information here */}
+          </Card.Text>
+        </Card.Body>
+      </Card>
+    ))
+  )}
         </TabPanel>
 
         <TabPanel>
