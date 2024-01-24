@@ -90,7 +90,9 @@ function MusicApp() {
           {events.length === 0 && <p>No results found for events.</p>}
           {events.map((event) => (
             <Card key={event.id} style={{ margin: '10px', display: 'flex', alignItems: 'center' }}>
+
               <Card.Img src={event.images[0]?.url} alt="Event" style={{ maxWidth: '200px', minWidth: '200px', objectFit: 'cover' }} />
+
               <Card.Body style={{ marginLeft: '10px' }}>
                 <Card.Title>
                   <a href={event.url} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
@@ -101,7 +103,9 @@ function MusicApp() {
                   <b>Where:</b> {event._embedded?.venues[0]?.name || 'Not available'}
                   <br />
                   <b>When:</b> {event.dates?.start?.localDate || 'Not available'} {event.dates?.start?.localTime || 'Not available'}
+
                   {/* other event information */}
+
                 </Card.Text>
               </Card.Body>
             </Card>
@@ -113,5 +117,3 @@ function MusicApp() {
 }
 
 export default MusicApp;
-
-
