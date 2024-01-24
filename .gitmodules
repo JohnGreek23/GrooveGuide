@@ -1,0 +1,3 @@
+[submodule "GrooveGuide"]
+  path = GrooveGuide
+  url = https://github.com/JohnGreek23/GrooveGuide.git
