@@ -17,6 +17,11 @@ function MusicApp() {
     setArtist(e.target.value);
   };
 
+  const resetInputs = () => {
+    setGenre('');
+    setArtist('');
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (navigator.geolocation) {
@@ -35,6 +40,7 @@ function MusicApp() {
       .then((res) => res.json())
       .then((data) => {
         setEvents(data?._embedded?.events || []);
+        resetInputs(); // Reset inputs when results load
       })
       .catch((error) => {
         console.error('Error fetching events:', error);
@@ -77,29 +83,16 @@ function MusicApp() {
         </TabList>
 
         <TabPanel>
-          {events.length === 0 && <p>No results found for artists.</p>}
-          {events.map((event) => (
-            <div key={event.id}>
-              <h3>{event.name}</h3>
-              <p>
-                Location: {event._embedded?.venues[0]?.name || 'Not available'}
-                <br />
-                Date & Time: {event.dates?.start?.localDate || 'Not available'} {event.dates?.start?.localTime || 'Not available'}
-                <br />
-                <a href={event.url} target="_blank" rel="noopener noreferrer">
-                  Ticketmaster Link
-                </a>
-              </p>
-              {/* other event information */}
-            </div>
-          ))}
+          <p>No results found for artists.</p>
         </TabPanel>
 
         <TabPanel>
           {events.length === 0 && <p>No results found for events.</p>}
           {events.map((event) => (
             <Card key={event.id} style={{ margin: '10px', display: 'flex', alignItems: 'center' }}>
-              <Card.Img src={event.images[0]?.url} alt="Event" style={{ maxWidth: '200px', objectFit: 'cover' }} />
+
+              <Card.Img src={event.images[0]?.url} alt="Event" style={{ maxWidth: '200px', minWidth: '200px', objectFit: 'cover' }} />
+
               <Card.Body style={{ marginLeft: '10px' }}>
                 <Card.Title>
                   <a href={event.url} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
@@ -110,7 +103,9 @@ function MusicApp() {
                   <b>Where:</b> {event._embedded?.venues[0]?.name || 'Not available'}
                   <br />
                   <b>When:</b> {event.dates?.start?.localDate || 'Not available'} {event.dates?.start?.localTime || 'Not available'}
-                  {}
+
+                  {/* other event information */}
+
                 </Card.Text>
               </Card.Body>
             </Card>
