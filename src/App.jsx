@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 
 function MusicApp() {
   const [genre, setGenre] = useState('');
   const [artist, setArtist] = useState('');
-  const [artists, setArtists] = useState([]);
   const [events, setEvents] = useState([]);
+  const [latlong, setLatLong] = useState('');
 
   const handleGenreChange = (e) => {
     setGenre(e.target.value);
@@ -19,81 +19,105 @@ function MusicApp() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-     if (genre) {
-      fetchRecommendedArtists(genre);
-    }
-    if (artist) {
-      fetchRecommendedEvents(artist);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        const { latitude, longitude } = position.coords;
+        setLatLong(`${latitude},${longitude}`);
+        fetchRecommendedEvents(artist || genre, `${latitude},${longitude}`);
+      });
     }
   };
 
-  const fetchRecommendedEvents = (artist) => {
+  const fetchRecommendedEvents = (keyword, location) => {
     const apiKey = 'pKiE2zYyc7KexxDyMtquVIRjuChhCFzo';
-    const location = 'YOUR_USER_LOCATION';
-  
-    fetch(`https://app.ticketmaster.com/discovery/v2/events.json?keyword=${artist}&apikey=${apiKey}&location=${location}`)
+
+    fetch(`https://app.ticketmaster.com/discovery/v2/events.json?keyword=${keyword}&apikey=${apiKey}&latlong=${location}`)
       .then((res) => res.json())
       .then((data) => {
         setEvents(data?._embedded?.events || []);
       })
       .catch((error) => {
         console.error('Error fetching events:', error);
+        setEvents([]); // Clear events in case of an error
       });
   };
 
-  useEffect(() => {
-    
-  }, []);
-
   return (
-    <div className="music-app">
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="genre">
-          <Form.Label>Pick a genre</Form.Label>
-          <Form.Control as="select" value={genre} onChange={handleGenreChange}>
-            <option value="">Select Genre</option>
-            <option value="rock">Rock</option>
-            <option value="pop">Pop</option>
-            <option value="hip-hop">Hip Hop</option>
-            <option value="country">Country</option>
-          </Form.Control>
-        </Form.Group>
+    <Container className="music-app" style={{ marginTop: '50px', textAlign: 'center', backgroundColor: '#343a40', color: 'white', padding: '20px' }}>
+      <Row>
+        <Col>
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="genre">
+              <Form.Label>Pick a genre</Form.Label>
+              <Form.Control as="select" value={genre} onChange={handleGenreChange}>
+                <option value="">Select Genre</option>
+                <option value="rock">Rock</option>
+                <option value="pop">Pop</option>
+                <option value="hip-hop">Hip Hop</option>
+                <option value="country">Country</option>
+              </Form.Control>
+            </Form.Group>
 
-        <Form.Group controlId="artist">
-          <Form.Label>Or search for an artist</Form.Label>
-          <Form.Control type="text" value={artist} onChange={handleArtistChange} />
-        </Form.Group>
+            <Form.Group controlId="artist">
+              <Form.Label>Or search for an artist</Form.Label>
+              <Form.Control type="text" value={artist} onChange={handleArtistChange} />
+            </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
+            <Button variant="primary" type="submit">
+              Go
+            </Button>
+          </Form>
+        </Col>
+      </Row>
 
-      <Tabs>
+      <Tabs style={{ marginTop: '20px' }}>
         <TabList>
           <Tab>Recommended Artists</Tab>
           <Tab>Recommended Events</Tab>
         </TabList>
 
         <TabPanel>
-          {artists.map((artist) => (
-            <div key={artist.id}>
-              <h3>{artist.name}</h3>
-              {/* other artist information */}
+          {events.length === 0 && <p>No results found for artists.</p>}
+          {events.map((event) => (
+            <div key={event.id}>
+              <h3>{event.name}</h3>
+              <p>
+                Location: {event._embedded?.venues[0]?.name || 'Not available'}
+                <br />
+                Date & Time: {event.dates?.start?.localDate || 'Not available'} {event.dates?.start?.localTime || 'Not available'}
+                <br />
+                <a href={event.url} target="_blank" rel="noopener noreferrer">
+                  Ticketmaster Link
+                </a>
+              </p>
+              {/* other event information */}
             </div>
           ))}
         </TabPanel>
 
         <TabPanel>
+          {events.length === 0 && <p>No results found for events.</p>}
           {events.map((event) => (
-            <div key={event.id}>
-              <h3>{event.name}</h3>
-              {/* other event information */}
-            </div>
+            <Card key={event.id} style={{ margin: '10px', display: 'flex', alignItems: 'center' }}>
+              <Card.Img src={event.images[0]?.url} alt="Event" style={{ maxWidth: '200px', objectFit: 'cover' }} />
+              <Card.Body style={{ marginLeft: '10px' }}>
+                <Card.Title>
+                  <a href={event.url} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
+                    {event.name}
+                  </a>
+                </Card.Title>
+                <Card.Text>
+                  Location: {event._embedded?.venues[0]?.name || 'Not available'}
+                  <br />
+                  Date & Time: {event.dates?.start?.localDate || 'Not available'} {event.dates?.start?.localTime || 'Not available'}
+                  {/* other event information */}
+                </Card.Text>
+              </Card.Body>
+            </Card>
           ))}
         </TabPanel>
       </Tabs>
-    </div>
+    </Container>
   );
 }
 
