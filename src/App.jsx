@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
-import logo from './images/music-notes.png'
+import logo from './images/music-notes.png';
+import jumbobanner from './images/jumbobanner.png';
 
 
 function MusicApp() {
@@ -46,13 +47,19 @@ function MusicApp() {
 
   return (
     <div>
-    <nav className="navbar bg-body-tertiary">
+    <nav className="navbar bg-body-tertiary" >
             <div className="container-fluid">
                 <a className="navbar-brand"  style={{fontSize: '40px'}}>
                     <img src={logo} alt="Logo"  className="logo" style={{width: '60px', height: '60px', marginRight: '25px', verticalAlign: 'middle'}}/>GrooveGuide
                 </a>
             </div>
     </nav>
+    <div>
+            <div className="jumbotron" style={{textAlign: 'center', marginTop: '50px'}}>
+                <h1 className="display-4">Your Gateway to Limitless Discovery!</h1>
+                <p>Your next favourite artist and unforgettable live experience are just a tap away.</p>
+            </div>
+        </div>
     <Container className="music-app" style={{ marginTop: '50px', textAlign: 'center', backgroundColor: '#343a40', color: 'white', padding: '20px' }}>
       <Row>
         <Col>
