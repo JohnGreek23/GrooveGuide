@@ -103,7 +103,7 @@ function MusicApp() {
     </nav>
     <div>
             <div className="jumbotron" style={{textAlign: 'center'}}>
-                <h1 className="display-4">Your Gateway to Limitless Discovery!</h1>
+                <h1 className="display-4">Your Gateway to Limitless Discovery, Near you!</h1>
                 <p>Your next favourite artist and unforgettable live experience are just a tap away.</p>
                 <Row>
         <Col>
