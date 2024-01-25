@@ -56,14 +56,29 @@ function MusicApp() {
   };
 
   const fetchRecommendedArtists = (keyword) => {
-    const lastFmApiKey = '0fc8b422278de689fe5ad13e0b059af2'; // Replace with your Last.fm API key
+    const lastFmApiKey = '0fc8b422278de689fe5ad13e0b059af2';
   
     axios
       .get(`http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&artist=${keyword}&api_key=${lastFmApiKey}&format=json`)
       .then((response) => {
         const similarArtistsData = response.data?.similarartists?.artist || [];
-        setArtists(similarArtistsData);
-        resetInputs(); // Reset inputs when results load
+
+        // Fetch detailed information for each artist
+        const promises = similarArtistsData.map((similarArtist) =>
+          axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.getInfo&artist=${encodeURIComponent(similarArtist.name)}&api_key=${lastFmApiKey}&format=json`)
+        );
+
+        // Wait for all promises to resolve
+        Promise.all(promises)
+          .then((detailedResponses) => {
+            const detailedArtistsData = detailedResponses.map((detailedResponse) => detailedResponse.data.artist);
+            setArtists(detailedArtistsData);
+            resetInputs(); // Reset inputs when results load
+          })
+          .catch((error) => {
+            console.error('Error fetching detailed artist information:', error);
+            setArtists([]); // Clear artists in case of an error
+          });
       })
       .catch((error) => {
         console.error('Error fetching similar artists:', error);
@@ -121,25 +136,27 @@ function MusicApp() {
         </TabList>
 
         <TabPanel>
-        {artists.length === 0 ? (
-        <p>No results found for artists.</p>
-        ) : (
-          artists.map((artist, index) => (
-          <Card key={`artist_${index}`} style={{ margin: '10px', display: 'flex', alignItems: 'center' }}>
-            {/* Display artist information here */}
-            <Card.Body style={{ marginLeft: '10px' }}>
-              <Card.Title>
-                <a href={`https://www.last.fm/music/${artist.name}`} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
-                  {artist.name}
-            </a>
-          </Card.Title>
-          <Card.Text>
-            {/* Display additional artist information here */}
-          </Card.Text>
-        </Card.Body>
-      </Card>
-    ))
-  )}
+          {artists.length === 0 ? (
+            <p>No results found for artists.</p>
+          ) : (
+            artists.map((artist, index) => (
+              <Card key={`artist_${index}`} style={{ margin: '10px', display: 'flex', alignItems: 'center' }}>
+                <Card.Img
+                  src={artist.image[2]?.['#text']}
+                  alt="Artist"
+                  style={{ maxWidth: '200px', minWidth: '200px', objectFit: 'cover' }}
+                />
+                <Card.Body style={{ marginLeft: '10px' }}>
+                  <Card.Title>
+                    <a href={artist.url} target="_blank" rel="noopener noreferrer" style={{ color: 'white' }}>
+                      {artist.name}
+                    </a>
+                  </Card.Title>
+                  <Card.Text>{artist.bio?.summary || 'No information available.'}</Card.Text>
+                </Card.Body>
+              </Card>
+            ))
+          )}
         </TabPanel>
 
         <TabPanel>
