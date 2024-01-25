@@ -152,7 +152,7 @@ function MusicApp() {
                       {artist.name}
                     </a>
                   </Card.Title>
-                  <Card.Text>{artist.bio?.summary || 'No information available.'}</Card.Text>
+                  <Card.Text dangerouslySetInnerHTML={{ __html: artist.bio?.summary || 'No information available.' }} />
                 </Card.Body>
               </Card>
             ))
