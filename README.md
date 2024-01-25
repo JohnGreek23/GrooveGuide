@@ -1,8 +1,23 @@
-# React + Vite
+# GrooveGuide
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description 
 
-Currently, two official plugins are available:
+GrooveGuide is your ultimate music companion, seamlessly combining artist recommendations and local event discovery. Explore new genres and stay informed about upcoming live events – all in one place. With GrooveGuide, finding the perfect soundtrack for your life has never been easier.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Technologies 
+
+* React
+* Bootstrap
+* Ticketmaster API
+* Last.fm API
+* Location services
+* Axios
+* Vite
+
+## Screenshot 
+
+![Alt text](./src/images/image1.png)
+
+## Deployment
+
+Check out GrooveGuide in action: https://grooveguide-project.netlify.app/
