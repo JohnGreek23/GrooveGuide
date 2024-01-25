@@ -59,13 +59,13 @@ function MusicApp() {
     const lastFmApiKey = '0fc8b422278de689fe5ad13e0b059af2';
   
     axios
-      .get(`http://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&artist=${keyword}&api_key=${lastFmApiKey}&format=json`)
+      .get(`https://ws.audioscrobbler.com/2.0/?method=artist.getSimilar&artist=${keyword}&api_key=${lastFmApiKey}&format=json`)
       .then((response) => {
         const similarArtistsData = response.data?.similarartists?.artist || [];
 
         // Fetch detailed information for each artist
         const promises = similarArtistsData.map((similarArtist) =>
-          axios.get(`http://ws.audioscrobbler.com/2.0/?method=artist.getInfo&artist=${encodeURIComponent(similarArtist.name)}&api_key=${lastFmApiKey}&format=json`)
+          axios.get(`https://ws.audioscrobbler.com/2.0/?method=artist.getInfo&artist=${encodeURIComponent(similarArtist.name)}&api_key=${lastFmApiKey}&format=json`)
         );
 
         // Wait for all promises to resolve
