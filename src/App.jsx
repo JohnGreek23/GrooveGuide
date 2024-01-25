@@ -36,6 +36,11 @@ function MusicApp() {
         setLatLong(`${latitude},${longitude}`);
         fetchRecommendedEvents(artist || genre, `${latitude},${longitude}`);
         fetchRecommendedArtists(artist || genre);
+
+        const targetSection = document.getElementById("recommended-section");
+        if (targetSection) {
+          targetSection.scrollIntoView({ behavior: "smooth", block: "start"});
+        }
       });
     }
   };
@@ -127,7 +132,7 @@ function MusicApp() {
       </Row>
             </div>
         </div>
-    <Container className="music-app" style={{ textAlign: 'center', color: 'white', padding: '20px', backgroundColor: '#313639' }}>
+    <Container id="recommended-section" className="music-app" style={{ textAlign: 'center', color: 'white', padding: '20px', backgroundColor: '#313639' }}>
       <Tabs style={{ marginTop: '20px' }}>
         <TabList>
           <Tab>Recommended Artists</Tab>
