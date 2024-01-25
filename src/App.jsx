@@ -3,8 +3,8 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
-import logo from './images/music-notes.png';
-import jumbobanner from './images/jumbobanner.png';
+import logo from './images/radio-waves.png';
+
 
 
 function MusicApp() {
@@ -91,24 +91,21 @@ function MusicApp() {
     <div>
     <nav className="navbar bg-body-tertiary" >
             <div className="container-fluid">
-                <a className="navbar-brand"  style={{fontSize: '40px'}}>
-                    <img src={logo} alt="Logo"  className="logo" style={{width: '60px', height: '60px', marginRight: '25px', verticalAlign: 'middle'}}/>GrooveGuide
+                <a className="navbar-brand"  style={{fontSize: '30px'}}>
+                    <img src={logo} alt="Logo"  className="logo" style={{width: '60px', height: '60px', margin: '0px 15px', verticalAlign: 'middle'}}/>GrooveGuide
                 </a>
             </div>
     </nav>
     <div>
-            <div className="jumbotron" style={{textAlign: 'center', marginTop: '50px'}}>
+            <div className="jumbotron" style={{textAlign: 'center'}}>
                 <h1 className="display-4">Your Gateway to Limitless Discovery!</h1>
                 <p>Your next favourite artist and unforgettable live experience are just a tap away.</p>
-            </div>
-        </div>
-    <Container className="music-app" style={{ marginTop: '50px', textAlign: 'center', backgroundColor: '#343a40', color: 'white', padding: '20px' }}>
-      <Row>
+                <Row>
         <Col>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="genre">
-              <Form.Label>Pick a genre</Form.Label>
-              <Form.Control as="select" value={genre} onChange={handleGenreChange}>
+            <Form.Group controlId="genre" style={{ marginBottom: '25px'}}>
+              {/* <Form.Label style={{ marginRight: '15px'}}>Select a genre</Form.Label> */}
+              <Form.Control style={{width: '250px', height: '35px', borderRadius: '50px'}} as="select" value={genre} onChange={handleGenreChange}>
                 <option value="">Select Genre</option>
                 <option value="rock">Rock</option>
                 <option value="pop">Pop</option>
@@ -118,17 +115,19 @@ function MusicApp() {
             </Form.Group>
 
             <Form.Group controlId="artist">
-              <Form.Label>Or search for an artist</Form.Label>
-              <Form.Control type="text" value={artist} onChange={handleArtistChange} />
+              {/* <Form.Label style={{ marginRight: '15px'}}>Or search for an artist</Form.Label> */}
+              <Form.Control style={{width: '250px', height: '30px', borderRadius: '50px'}} type="text" placeholder="Search for an artist" value={artist} onChange={handleArtistChange} />
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button className="button-go" variant="primary" type="submit">
               Go
             </Button>
           </Form>
         </Col>
       </Row>
-
+            </div>
+        </div>
+    <Container className="music-app" style={{ textAlign: 'center', color: 'white', padding: '20px', backgroundColor: '#313639' }}>
       <Tabs style={{ marginTop: '20px' }}>
         <TabList>
           <Tab>Recommended Artists</Tab>
